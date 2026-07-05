@@ -1,0 +1,14 @@
+# Cloudflare Pages headers. Meta-tag CSP can't set frame-ancestors and doesn't
+# govern the service worker — these headers close both gaps when deployed there.
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: geolocation=(), camera=(), microphone=()
+
+# The service worker takes its CSP from this response, not the page's meta tag.
+# It needs connect-src 'self' for its own network-first fetches — nothing else.
+/sw.js
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; connect-src 'self'

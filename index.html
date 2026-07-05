@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSP blocks all network access — the proof behind "your file never leaves your device" -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+  <meta name="color-scheme" content="light">
+  <title>Blackout — local-only image redaction</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23141414'/%3E%3C/svg%3E">
+</head>
+<body>
+
+  <header class="topbar">
+    <h1 class="wordmark" aria-label="Blackout">BLACK<span class="wordmark-bar" aria-hidden="true"></span>UT</h1>
+    <div class="netstatus" title="This page ships a Content-Security-Policy that blocks every network request. Open devtools and try — nothing can leave.">
+      <span class="led" aria-hidden="true"></span>
+      <span class="netstatus-label">local only — file never leaves this device</span>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+
+    <div class="dropzone" id="dropzone" tabindex="0" role="button"
+         aria-label="Drop an image, paste from clipboard, or press Enter to browse">
+      <p class="dropzone-title">
+        Drop <span class="redacted-word">a screenshot</span> here
+      </p>
+      <p class="dropzone-sub">or paste (&#8984;V) &middot; or <button type="button" class="linklike" id="browseBtn">browse</button></p>
+      <p class="dropzone-note">
+        Draw black boxes. Export a flat copy. Pixels underneath are gone,
+        EXIF &amp; location metadata stripped.
+      </p>
+    </div>
+
+    <div class="canvas-wrap" id="canvasWrap" hidden>
+      <canvas id="canvas"></canvas>
+    </div>
+
+  </main>
+
+  <footer class="toolbar" id="toolbar" hidden>
+    <div class="toolbar-group">
+      <button type="button" id="undoBtn" disabled>undo</button>
+      <button type="button" id="clearBtn" disabled>clear boxes</button>
+      <button type="button" id="newBtn">new image</button>
+    </div>
+    <p class="toolbar-hint" id="hint">drag to draw a box</p>
+    <div class="toolbar-group">
+      <label class="format-label" for="format">format</label>
+      <select id="format">
+        <option value="image/png" selected>PNG</option>
+        <option value="image/jpeg">JPG</option>
+      </select>
+      <button type="button" id="copyBtn" title="Copy the redacted image to the clipboard (always PNG)">copy</button>
+      <button type="button" id="exportBtn" class="primary">download safe copy</button>
+    </div>
+  </footer>
+
+  <input type="file" id="fileInput" accept="image/*" hidden>
+
+  <script src="app.js"></script>
+</body>
+</html>
